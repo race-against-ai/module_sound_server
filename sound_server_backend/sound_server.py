@@ -3,10 +3,6 @@ import pygame
 from pathlib import Path
 import pynng
 from random import choice
-from time import sleep
-
-REQUEST_ADDRESS = "ipc:///tmp/RAAI/sound_request.ipc"
-STATUS_ADDRESS = "ipc:///tmp/RAAI/sound_server_status.ipc"
 
 
 def get_sound_folder_content(folder):
@@ -46,10 +42,9 @@ class SoundPlayer:
 
 
 class RequestHandler:
-    def __init__(self, sound_player, request_address, status_socket):
+    def __init__(self, sound_player, request_address):
         self.sound_player = sound_player
         self.request_address = request_address
-        self.status_socket = status_socket
 
     def run(self):
         with pynng.Rep0() as sock:
@@ -62,11 +57,10 @@ class RequestHandler:
 
     def process_request(self, msg, sock):
         if msg == "random_meme":
-            sock.send("Playing random meme".encode('utf-8'))
-            self.send_status("running")
+            print("Playing random meme")
             self.sound_player.play_random_meme()
+            print("Sending response")
             sock.send("Played random meme".encode('utf-8'))
-            self.send_status("idle")
         else:
             if msg in self.sound_player.sound_dict:
                 print("Playing sound: ", msg)
@@ -76,20 +70,14 @@ class RequestHandler:
                 print("Sound not found: ", msg)
                 sock.send("Sound not found".encode('utf-8'))
 
-    def send_status(self, status):
-        self.status_socket.send(status.encode('utf-8'))
-
 
 def main():
     parent_path = Path(__file__).parent.parent.absolute()
     sound_folder = parent_path / 'sound_files'
     meme_sound_folder = parent_path / 'meme_sound_files'
-
-    status_socket = pynng.Pub0()
-    status_socket.listen(STATUS_ADDRESS)
-    sleep(2)
+    request_address = "ipc:///tmp/RAAI/sound_request.ipc"
 
     player = SoundPlayer(sound_folder, meme_sound_folder)
-    request_handler = RequestHandler(player, REQUEST_ADDRESS, status_socket)
+    request_handler = RequestHandler(player, request_address)
 
     request_handler.run()
