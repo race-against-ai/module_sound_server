@@ -20,11 +20,15 @@ class SoundPlayer:
         self.meme_sound_folder = meme_sound_folder
         self.sound_dict = get_sound_folder_content(self.sound_folder)
         self.meme_sound_dict = get_sound_folder_content(self.meme_sound_folder)
-        init()
+
         if use_dummy_audio:
-            mixer.init(devicename='pygame')
-        else:
-            mixer.init()
+            os.environ['SDL_AUDIODRIVER'] = 'dummy'
+
+        init()
+        mixer.init()
+
+        if use_dummy_audio:
+            del os.environ['SDL_AUDIODRIVER']
 
     def play_sound(self, sound_file):
         sound = mixer.Sound(self.sound_dict.get(sound_file))
