@@ -15,13 +15,16 @@ def get_sound_folder_content(folder):
 
 
 class SoundPlayer:
-    def __init__(self, sound_folder, meme_sound_folder):
+    def __init__(self, sound_folder, meme_sound_folder, use_dummy_audio=False):
         self.sound_folder = sound_folder
         self.meme_sound_folder = meme_sound_folder
         self.sound_dict = get_sound_folder_content(self.sound_folder)
         self.meme_sound_dict = get_sound_folder_content(self.meme_sound_folder)
         init()
-        mixer.init()
+        if use_dummy_audio:
+            mixer.init(devicename='pygame')
+        else:
+            mixer.init()
 
     def play_sound(self, sound_file):
         sound = mixer.Sound(self.sound_dict.get(sound_file))

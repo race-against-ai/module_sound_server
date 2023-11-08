@@ -20,7 +20,7 @@ class TestSoundPlayer(unittest.TestCase):
     @patch("pygame.mixer.Sound")
     @patch("pygame.time.delay")
     def test_play_sound(self, mock_delay, mock_sound):
-        sound_player = SoundPlayer(self.sound_folder, self.meme_sound_folder)
+        sound_player = SoundPlayer(self.sound_folder, self.meme_sound_folder, use_dummy_audio=True)
         sound_player.play_sound("race-start.mp3")
         mock_sound.assert_called_once_with(str(CURRENT_DIR / "test_sound_files/race-start.mp3"))
         mock_sound.return_value.play.assert_called_once()
@@ -31,7 +31,7 @@ class TestSoundPlayer(unittest.TestCase):
     @patch("random.choice")
     def test_play_random_meme(self, mock_choice, mock_delay, mock_sound):
         mock_choice.return_value = "random_meme.mp3"
-        sound_player = SoundPlayer(self.sound_folder, self.meme_sound_folder)
+        sound_player = SoundPlayer(self.sound_folder, self.meme_sound_folder, use_dummy_audio=True)
         sound_player.play_random_meme()
         mock_sound.assert_called_once_with(str(CURRENT_DIR / "test_meme_sound_files/he_can_fock_of.mp3"))
         mock_sound.return_value.play.assert_called_once()
