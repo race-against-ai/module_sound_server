@@ -1,12 +1,16 @@
 import unittest
 from unittest.mock import patch, MagicMock
 from sound_server_backend.sound_server import SoundPlayer, RequestHandler, get_sound_folder_content
+from pathlib import Path
+
+# Constants
+CURRENT_DIR = Path(__file__).parent
 
 
 class TestSoundPlayer(unittest.TestCase):
     def setUp(self):
-        self.sound_folder = "./test_sound_files"
-        self.meme_sound_folder = "./test_meme_sound_files"
+        self.sound_folder = str(CURRENT_DIR / "test_sound_files")
+        self.meme_sound_folder = str(CURRENT_DIR / "test_meme_sound_files")
 
     def test_get_sound_folder_content(self):
         sound_dict = get_sound_folder_content(self.sound_folder)
@@ -18,7 +22,7 @@ class TestSoundPlayer(unittest.TestCase):
     def test_play_sound(self, mock_delay, mock_sound):
         sound_player = SoundPlayer(self.sound_folder, self.meme_sound_folder)
         sound_player.play_sound("race-start.mp3")
-        mock_sound.assert_called_once_with("./test_sound_files\\race-start.mp3")
+        mock_sound.assert_called_once_with(str(CURRENT_DIR / "test_sound_files\\race-start.mp3"))
         mock_sound.return_value.play.assert_called_once()
         mock_delay.assert_called_once()
 
@@ -29,7 +33,7 @@ class TestSoundPlayer(unittest.TestCase):
         mock_choice.return_value = "random_meme.mp3"
         sound_player = SoundPlayer(self.sound_folder, self.meme_sound_folder)
         sound_player.play_random_meme()
-        mock_sound.assert_called_once_with("./test_meme_sound_files\\he_can_fock_of.mp3")
+        mock_sound.assert_called_once_with(str(CURRENT_DIR / "test_meme_sound_files\\he_can_fock_of.mp3"))
         mock_sound.return_value.play.assert_called_once()
         mock_delay.assert_called_once()
 
