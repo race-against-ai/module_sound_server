@@ -9,15 +9,15 @@ def read(fname):
 
 
 setup(
-    name="raai_module_template",
+    name="raai_module_sound_server",
     version=versioneer.get_version(),
     cmdclass=versioneer.get_cmdclass(),
     author="NGITl",
-    author_email="your@email.de",
-    description=("RAAI Module Template for managing different projects for RAAI"),
+    author_email="calvinteuber7@gmail.com",
+    description=("A RAAI Module, which play specific sounds if demanded over a pynng msg"),
     license="GPL 3.0",
-    keywords="template",
-    url="https://github.com/vw-wob-it-edu-ngitl/raai_module_template",
+    keywords="",
+    url="https://github.com/vw-wob-it-edu-ngitl/raai_module_sound_server",
     packages=find_packages(),
     long_description=read("README.md"),
     install_requires=["pynng~=0.7.2"],
