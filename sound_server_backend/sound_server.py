@@ -22,13 +22,13 @@ class SoundPlayer:
         self.meme_sound_dict = get_sound_folder_content(self.meme_sound_folder)
 
         if use_dummy_audio:
-            os.environ['SDL_AUDIODRIVER'] = 'dummy'
+            os.environ["SDL_AUDIODRIVER"] = "dummy"
 
         init()
         mixer.init()
 
         if use_dummy_audio:
-            del os.environ['SDL_AUDIODRIVER']
+            del os.environ["SDL_AUDIODRIVER"]
 
     def play_sound(self, sound_file):
         sound = mixer.Sound(self.sound_dict.get(sound_file))
