@@ -7,8 +7,8 @@ SOUND_REQUEST_ADDRESS = "ipc:///tmp/RAAI/sound_request.ipc"
 def send_sound_request():
     with pynng.Req0() as sock:
         sock.dial(SOUND_REQUEST_ADDRESS)
-        sound_file = 'random_meme'
-        sock.send(sound_file.encode('utf-8'))
+        sound_file = "random_meme"
+        sock.send(sound_file.encode("utf-8"))
 
         try:
             msg = sock.recv_msg()
